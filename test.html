@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TRP System Test</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        .container {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+        .input-group {
+            display: flex;
+            gap: 10px;
+        }
+        input {
+            flex-grow: 1;
+            padding: 8px;
+        }
+        button {
+            padding: 8px 16px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+        #result {
+            background-color: #f5f5f5;
+            padding: 20px;
+            border-radius: 4px;
+            white-space: pre-wrap;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>TRP System Test</h1>
+        
+        <div class="input-group">
+            <input type="text" id="domainInput" placeholder="Enter domain (e.g., amazon.com)">
+            <button id="testButton">Test Domain</button>
+        </div>
+        
+        <h3>Result:</h3>
+        <div id="result">No results yet. Enter a domain and click Test.</div>
+    </div>
+
+    <script>
+        // Real implementation loader
+        async function loadImplementation(trpId) {
+            try {
+                // Fetch the implementation file based on the TRP ID
+                const response = await fetch(`./implementations/trp-${trpId}/index.js`);
+                
+                if (!response.ok) {
+                    throw new Error(`Failed to load implementation for TRP: ${trpId}`);
+                }
+                
+                // Get the implementation code as text
+                const implementationCode = await response.text();
+                
+                // Create a function from the implementation code
+                // This approach allows the implementation file to simply return an object
+                const implementationFunction = new Function(implementationCode);
+                
+                // Execute the function to get the implementation object
+                const implementation = implementationFunction();
+                
+                console.log(`Successfully loaded implementation for TRP: ${trpId}`);
+                return implementation;
+            } catch (error) {
+                console.error(`Error loading implementation for TRP ${trpId}:`, error);
+                return { error: `Failed to load implementation: ${error.message}` };
+            }
+        }
+
+        // Registry loading
+        async function loadRegistry() {
+            try {
+                const response = await fetch('./trp-registry.json');
+                if (!response.ok) {
+                    throw new Error(`Failed to load registry: ${response.statusText}`);
+                }
+                return await response.json();
+            } catch (error) {
+                console.error('Error loading registry:', error);
+                return { implementations: [] };
+            }
+        }
+
+        // Find matching TRP
+        function findMatchingTrp(registry, domain) {
+            return registry.implementations.find(impl => 
+                impl.domains.some(d => domain === d || domain.endsWith('.' + d))
+            );
+        }
+
+        // Main function
+        async function getRulesForDomain(domain) {
+            const registry = await loadRegistry();
+            const matchingTrp = findMatchingTrp(registry, domain);
+            
+            if (matchingTrp) {
+                return await loadImplementation(matchingTrp.trp);
+            }
+            
+            // Fallback
+            return { error: `No matching TRP found for domain: ${domain}` };
+        }
+
+        // UI Interaction
+        document.getElementById('testButton').addEventListener('click', async () => {
+            const domain = document.getElementById('domainInput').value.trim();
+            const resultElement = document.getElementById('result');
+            
+            if (!domain) {
+                resultElement.textContent = "Please enter a domain to test.";
+                return;
+            }
+            
+            resultElement.textContent = "Loading...";
+            
+            try {
+                const rules = await getRulesForDomain(domain);
+                resultElement.textContent = JSON.stringify(rules, null, 2);
+            } catch (error) {
+                resultElement.textContent = `Error: ${error.message}`;
+                console.error(error);
+            }
+        });
+    </script>
+</body>
+</html>

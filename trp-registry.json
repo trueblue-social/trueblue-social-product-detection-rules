@@ -1,0 +1,28 @@
+{
+  "name": "TrueBlue Scraping Rules Registry",
+  "version": "1.0.0",
+  "lastUpdated": "2025-04-21",
+  "implementations": [
+    {
+      "trp": "1001",
+      "name": "Amazon",
+      "version": "1.0.0",
+      "domains": [
+        "amazon.com",
+        "amazon.co.uk",
+        "amazon.de",
+        "amazon.ca",
+        "amazon.fr",
+        "amazon.it",
+        "amazon.es",
+        "amazon.co.jp",
+        "amazon.in"
+      ],
+      "type": "site-specific",
+      "status": "active",
+      "author": "TrueBlue",
+      "lastUpdated": "2025-04-21",
+      "path": "implementations/trp-1001/index.js"
+    }
+  ]
+}
