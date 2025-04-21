@@ -1,4 +1,4 @@
-# TrueBlue Product Detection Rules
+# TrueBlue Social Product Detection Rules
 
 A modular, extensible system for detecting and extracting product information from e-commerce websites. This repository contains rule definitions that power the TrueBlue Product Detector browser extension.
 
@@ -202,7 +202,7 @@ Contributions are welcome! Please feel free to submit a Pull Request.
 
 ## Contact
 
-TrueBlue Social - [website](https://www.trueblueSocial.com) - email@example.com
+TrueBlue Social - [website](trueblue.social.reviews@gmail.com) - trueblue.social.reviews@gmail.com
 
 ## Acknowledgments
 
