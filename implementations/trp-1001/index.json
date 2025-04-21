@@ -103,8 +103,14 @@
       }
     ],
     "dimensions": [
-      { "type": "css", "selector": "#productDetails_detailBullets_sections1 tr:has(th:contains('Dimensions')) td" },
       { "type": "css", "selector": ".po-dimensions .a-span9" }
+      { 
+        "type": "structuredJs",
+        "operation": "findTableRow",
+        "tableSelector": "#productDetails_detailBullets_sections1",
+        "headerText": "Dimensions",
+        "valueSelector": "td"
+      }
     ],
     "weight": [
       { "type": "css", "selector": "#productDetails_detailBullets_sections1 tr:has(th:contains('Weight')) td" },
