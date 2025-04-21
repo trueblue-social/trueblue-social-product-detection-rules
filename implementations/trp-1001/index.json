@@ -1,0 +1,125 @@
+{
+  "_meta": {
+    "trp": "1001",
+    "name": "Amazon",
+    "version": "1.0.0",
+    "domains": ["amazon.com", "amazon.co.uk", "amazon.de", "amazon.ca"],
+    "type": "site-specific",
+    "status": "active",
+    "author": "TrueBlue",
+    "lastUpdated": "2025-04-21"
+  },
+  
+  "productPageRules": [
+    { 
+      "type": "urlPattern", 
+      "pattern": "/dp/[A-Z0-9]{10}" 
+    },
+    { 
+      "type": "multiMatch", 
+      "conditions": [
+        { "type": "cssSelector", "selector": "#productTitle" },
+        { "type": "cssSelector", "selector": "#corePriceDisplay_desktop_feature_div, #corePrice_feature_div" }
+      ]
+    }
+  ],
+  
+  "attributes": {
+    "title": [
+      { "type": "css", "selector": "#productTitle" }
+    ],
+    "price": [
+      { "type": "css", "selector": ".a-price .a-offscreen" },
+      { "type": "css", "selector": "#priceblock_ourprice" },
+      { "type": "css", "selector": "#priceblock_dealprice" },
+      {
+        "type": "structuredJs",
+        "operation": "extractPrice",
+        "selectors": [
+          ".a-price .a-offscreen",
+          "#priceblock_ourprice",
+          "#priceblock_dealprice",
+          ".a-color-price",
+          ".priceToPay .a-offscreen"
+        ],
+        "fallbackRegex": "\\$\\s?(\\d+(?:\\.\\d{2})?)"
+      }
+    ],
+    "originalPrice": [
+      { "type": "css", "selector": ".a-text-price .a-offscreen" },
+      { "type": "css", "selector": "#listPrice" },
+      { "type": "css", "selector": "#priceblock_listprice" }
+    ],
+    "rating": [
+      { 
+        "type": "regex", 
+        "pattern": "([0-9]\\.[0-9]) out of 5 stars", 
+        "group": 1,
+        "source": "#averageCustomerReviews"
+      },
+      { "type": "css", "selector": ".a-icon-star .a-icon-alt" }
+    ],
+    "reviewCount": [
+      { 
+        "type": "regex", 
+        "pattern": "([\\d,]+) ratings", 
+        "group": 1,
+        "source": "#acrCustomerReviewText"
+      }
+    ],
+    "availability": [
+      { "type": "css", "selector": "#availability span" },
+      { "type": "css", "selector": "#deliveryMessageMirId" }
+    ],
+    "description": [
+      { "type": "css", "selector": "#productDescription p" },
+      { "type": "css", "selector": "#feature-bullets .a-list-item" },
+      {
+        "type": "structuredJs",
+        "operation": "combineElements",
+        "elements": [
+          { "selector": "#productDescription p", "prefix": "" },
+          { "selector": "#feature-bullets .a-list-item", "prefix": "• ", "join": "\n" }
+        ],
+        "separator": "\n\n"
+      }
+    ],
+    "brand": [
+      { "type": "css", "selector": "#bylineInfo" },
+      { "type": "css", "selector": "#brand" },
+      { "type": "css", "selector": ".po-brand .a-span9" }
+    ],
+    "images": [
+      {
+        "type": "structuredJs",
+        "operation": "extractImages",
+        "selectors": [
+          "#imgTagWrapperId img",
+          "#imageBlock img",
+          "#main-image",
+          ".imgTagWrapper img"
+        ],
+        "excludePatterns": ["transparent-pixel", "gif"]
+      }
+    ],
+    "dimensions": [
+      { "type": "css", "selector": "#productDetails_detailBullets_sections1 tr:has(th:contains('Dimensions')) td" },
+      { "type": "css", "selector": ".po-dimensions .a-span9" }
+    ],
+    "weight": [
+      { "type": "css", "selector": "#productDetails_detailBullets_sections1 tr:has(th:contains('Weight')) td" },
+      { "type": "css", "selector": ".po-item_weight .a-span9" }
+    ],
+    "asin": [
+      { "type": "css", "selector": "#ASIN, input[name='ASIN']", "attribute": "value" },
+      {
+        "type": "structuredJs",
+        "operation": "extractFromUrl",
+        "pattern": "/dp/([A-Z0-9]{10})",
+        "group": 1
+      }
+    ]
+  },
+  
+  "requiredAttributes": ["title", "asin"]
+}
