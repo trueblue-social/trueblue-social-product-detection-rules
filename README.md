@@ -202,7 +202,7 @@ Contributions are welcome! Please feel free to submit a Pull Request.
 
 ## Contact
 
-TrueBlue Social - [website](trueblue.social.reviews@gmail.com) - trueblue.social.reviews@gmail.com
+TrueBlue Social - [bluseky](https://bsky.app/profile/truebluereviews.bsky.social) - trueblue.social.reviews@gmail.com
 
 ## Acknowledgments
 
