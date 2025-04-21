@@ -207,4 +207,3 @@ TrueBlue Social - [bluseky](https://bsky.app/profile/truebluereviews.bsky.social
 ## Acknowledgments
 
 - Inspired by the Bitcoin Improvement Proposals (BIPs) system
-- Thanks to all contributors who have helped add support for various e-commerce sites
