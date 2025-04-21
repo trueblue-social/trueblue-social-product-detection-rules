@@ -103,7 +103,7 @@
       }
     ],
     "dimensions": [
-      { "type": "css", "selector": ".po-dimensions .a-span9" }
+      { "type": "css", "selector": ".po-dimensions .a-span9" },
       { 
         "type": "structuredJs",
         "operation": "findTableRow",
